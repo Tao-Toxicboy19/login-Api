@@ -1,3 +1,4 @@
+//loginController.ts
 import { Request, Response } from "express";
 import bcrypt from "bcrypt";
 import User from "../models/UserLogin";
@@ -11,7 +12,7 @@ export const loginController = async (req: Request, res: Response) => {
 
     // Check if the user exists
     if (!user) {
-      return res.status(404).json({ error: "User not found" });
+      return res.status(404).json({ error: "Invalid username or password" });
     }
 
     // Compare the password with the hashed password stored in the database

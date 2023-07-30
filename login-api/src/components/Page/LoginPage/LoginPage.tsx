@@ -1,5 +1,6 @@
 import axios from "axios";
 import React, { useState } from "react";
+import { Link } from "react-router-dom";
 
 type Props = {};
 
@@ -12,52 +13,85 @@ export default function LoginPage({}: Props) {
     e.preventDefault();
 
     try {
-      // Send login data to the server
       const response = await axios.post("http://localhost:4444/api/login", {
         username,
         password,
       });
 
-      // Handle successful login
-      console.log(response.data); // Show the response message from the server (e.g., "เข้าสู่ระบบสำเร็จ")
-
-      // Reset form fields
+      console.log(response.data);
       setUsername("");
       setPassword("");
       setError("");
     } catch (error: any) {
-      // Handle login error
-      console.log(error.response?.data?.error); // Show the error message from the server
-      setError(error.response?.data?.error || "เกิดข้อผิดพลาดในการเข้าสู่ระบบ");
+      console.log(error.response?.data?.error);
+      setError(error.response?.data?.error);
     }
   };
 
   return (
     <div>
-      <h2>Login Page</h2>
       <form onSubmit={handleSubmit}>
-        <div>
-          <label htmlFor="username">Username:</label>
-          <input
-            type="text"
-            id="username"
-            value={username}
-            onChange={(e) => setUsername(e.target.value)}
-            required
-          />
+        <div className="mt-5">
+          <div className="hero-content flex-col lg:flex-row-reverse">
+            <div className="text-center lg:text-left">
+              <h1 className="text-5xl font-bold">Login now!</h1>
+              <p className="py-6">
+                Provident cupiditate voluptatem et in. Quaerat fugiat ut
+                assumenda excepturi exercitationem quasi. In deleniti eaque aut
+                repudiandae et a id nisi.
+              </p>
+            </div>
+            <div className="card flex-shrink-0 w-full max-w-sm shadow-2xl bg-base-100">
+              <div className="card-body">
+                <div className="form-control">
+                  <label className="label">
+                    <span className="label-text">Username</span>
+                  </label>
+                  <input
+                    type="text"
+                    placeholder="Username"
+                    className="input input-bordered"
+                    id="username"
+                    value={username}
+                    onChange={(e) => setUsername(e.target.value)}
+                    required
+                  />
+                </div>
+                <div className="form-control">
+                  <label className="label">
+                    <span className="label-text">Password</span>
+                  </label>
+                  <input
+                    type="password"
+                    placeholder="password"
+                    className="input input-bordered"
+                    id="password"
+                    value={password}
+                    onChange={(e) => setPassword(e.target.value)}
+                    required
+                  />
+                  <label className="label">
+                    <a href="#" className="label-text-alt link link-hover">
+                      Forgot password?
+                    </a>
+                  </label>
+                </div>
+                <div className="form-control mt-6 flex flex-col gap-3">
+                  {error && <p style={{ color: "red" }}>{error}</p>}
+                  <button type="submit" className="btn btn-primary">
+                    Login
+                  </button>
+                  <Link 
+                    to={"/register"}
+                    className="btn btn-outline btn-primary"
+                  >
+                    Register
+                  </Link>
+                </div>
+              </div>
+            </div>
+          </div>
         </div>
-        <div>
-          <label htmlFor="password">Password:</label>
-          <input
-            type="password"
-            id="password"
-            value={password}
-            onChange={(e) => setPassword(e.target.value)}
-            required
-          />
-        </div>
-        {error && <p style={{ color: "red" }}>{error}</p>}
-        <button type="submit">Login</button>
       </form>
     </div>
   );
