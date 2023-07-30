@@ -3,32 +3,46 @@ import bcrypt from "bcrypt";
 import User from "../models/UserLogin";
 
 export const registerController = async (req: Request, res: Response) => {
-    const { username, email, password, confirmPassword } = req.body;
+    const { username, email, password, confirmpassword } = req.body;
 
-    try {
-        // Check if the user already exists with the same email
-        const existingUser = await User.findOne({ email });
-        if (existingUser) {
-            return res.status(409).json({ error: "มีผู้ใช้อีเมลนี้อยู่แล้ว" });
-        }
-
-        // Hash the password
-        const hashedPassword = await bcrypt.hash(password, 10);
-
-        // Create a new user
-        const newUser = new User({
-            username,
-            email,
-            password: hashedPassword,
-            confirmpassword: hashedPassword, // In this example, we're using the same hash for both passwords
-        });
-
-        // Save the new user to the database
-        await newUser.save();
-
-        return res.status(201).json({ message: "User registered successfully" });
-    } catch (error) {
-        console.error("Error registering user:", error);
-        return res.status(500).json({ error: "Internal server error" });
+    // Check if username already exists
+    const existingUsername = await User.findOne({ username });
+    if (existingUsername) {
+        return res.status(400).json({ error: "ชื่อผู้ใช้งานซ้ำกัน" });
     }
+
+    // Check if email already exists
+    const existingEmail = await User.findOne({ email });
+    if (existingEmail) {
+        return res.status(400).json({ error: "อีเมล์ซ้ำกัน" });
+    }
+
+    // Check if password and confirmpassword match
+    if (password !== confirmpassword) {
+        return res.status(400).json({ error: "รหัสผ่านและยืนยันรหัสผ่านไม่ตรงกัน" });
+    }
+
+    // Check if password length is at least 10 characters
+    if (password.length < 10) {
+        return res.status(400).json({ error: "รหัสผ่านต้องมีความยาวอย่างน้อย 10 ตัวอักษร" });
+    }
+
+    // Hash the password
+    const hashedPassword = await bcrypt.hash(password, 10);
+
+    // Create a new user
+    User.create({
+        username,
+        email,
+        password: hashedPassword,
+        confirmpassword: hashedPassword,
+    })
+        .then(() => {
+            res.json("ลงทะเบียนผู้ใช้งานเรียบร้อยแล้ว!!!");
+        })
+        .catch((err) => {
+            console.log(`Error: ${err}`);
+            res.status(500).json({ error: "เกิดข้อผิดพลาดในการลงทะเบียนผู้ใช้งาน" });
+        });
 };
+
