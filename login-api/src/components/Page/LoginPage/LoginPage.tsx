@@ -1,24 +1,33 @@
 import axios from "axios";
-import React, { useState } from "react";
+import React, { useContext, useState } from "react";
 import { Link } from "react-router-dom";
+import { useNavigate } from "react-router-dom";
+import { LoginTest } from "../../../App";
 
-type Props = {};
+type Props = {
+  // setLoggedIn: (value: boolean) => void; // เพิ่ม prop ใน type เพื่อรับฟังก์ชันเพื่อตั้งค่าค่า isLoggedIn
+};
 
 export default function LoginPage({}: Props) {
   const [username, setUsername] = useState("");
   const [password, setPassword] = useState("");
   const [error, setError] = useState("");
+  const navigate = useNavigate();
+
+  const { setLoggedIn } = useContext(LoginTest);
 
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
 
     try {
+      setLoggedIn(true);
+
       const response = await axios.post("http://localhost:4444/api/login", {
         username,
         password,
       });
-
       console.log(response.data);
+      navigate("/");
       setUsername("");
       setPassword("");
       setError("");
@@ -81,7 +90,7 @@ export default function LoginPage({}: Props) {
                   <button type="submit" className="btn btn-primary">
                     Login
                   </button>
-                  <Link 
+                  <Link
                     to={"/register"}
                     className="btn btn-outline btn-primary"
                   >
