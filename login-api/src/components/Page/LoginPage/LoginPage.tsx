@@ -4,9 +4,7 @@ import { Link } from "react-router-dom";
 import { useNavigate } from "react-router-dom";
 import { LoginTest } from "../../../App";
 
-type Props = {
-  // setLoggedIn: (value: boolean) => void; // เพิ่ม prop ใน type เพื่อรับฟังก์ชันเพื่อตั้งค่าค่า isLoggedIn
-};
+type Props = {};
 
 export default function LoginPage({}: Props) {
   const [username, setUsername] = useState("");
