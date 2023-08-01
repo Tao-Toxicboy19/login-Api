@@ -5,7 +5,7 @@ import { LoginTest } from "../../../App";
 type Props = {};
 
 export default function Header({}: Props) {
-  const { isLoggedIn } = useContext(LoginTest); // Correct destructuring syntax
+  const { isLoggedIn, setLoggedIn } = useContext(LoginTest); // Correct destructuring syntax
 
   return (
     <nav className="bg-white dark:bg-gray-900 w-full z-20 top-0 left-0 border-b border-gray-200 dark:border-gray-600">
@@ -26,13 +26,13 @@ export default function Header({}: Props) {
               Login
             </Link>
           ) : (
-            <Link
-              to={"/login"}
+            <button
               type="button"
               className="text-white bg-blue-700 font-medium rounded-lg text-sm px-4 py-2 text-center mr-3 md:mr-0 dark:bg-blue-600"
+              onClick={() => setLoggedIn(false)}
             >
               Logout
-            </Link>
+            </button>
           )}
 
           <button

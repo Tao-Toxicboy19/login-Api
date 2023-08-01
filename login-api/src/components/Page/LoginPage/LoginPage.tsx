@@ -19,13 +19,12 @@ export default function LoginPage({}: Props) {
 
     try {
       setLoggedIn(true);
-
+      navigate("/");
       const response = await axios.post("http://localhost:4444/api/login", {
         username,
         password,
       });
       console.log(response.data);
-      navigate("/");
       setUsername("");
       setPassword("");
       setError("");
